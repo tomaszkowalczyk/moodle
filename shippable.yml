@@ -86,7 +86,6 @@ install:
 
 before_script:
     - >
-      
         # Copy generic configuration in place.
         cp config-dist.php config.php ;
         # Create the moodledata directory.
