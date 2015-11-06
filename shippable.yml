@@ -19,9 +19,6 @@ php:
     # - 5.5
     - 5.4
 
-    # We hope to offer PHP 7 support in the near future.
-    - nightly
-
 env:
     # Although we want to run these jobs and see failures as quickly as possible, we also want to get the slowest job to
     # start first so that the total run time is not too high.
@@ -31,46 +28,7 @@ env:
     # Postgres is significantly is pretty reasonable in its run-time.
 
     # Run unit tests on MySQL
-    - DB=mysqli   PHPUNIT=true    INSTALL=false   CITEST=false
-
-    # Run CI Tests without running PHPUnit.
-    - DB=none     PHPUNIT=false   INSTALL=false   CITEST=true
-
-    # Run unit tests on Postgres
-    - DB=pgsql    PHPUNIT=true    INSTALL=false   CITEST=false
-
-matrix:
-    # Enable fast finish.
-    # This will fail the build if a single job fails (except those in allow_failures).
-    # It will not stop the jobs from running.
-    fast_finish: true
-
-    # Always allow failure on nightly.
-    # It's a nightly build and failures can happen.
-    allow_failures:
-        - php: nightly
-
-    exclude:
-        # PHP 7 is not yet supported for actual runs.
-        # Exclude it by default - we include it for CITEST only later.
-        - php: nightly
-
-        # MySQL - it's just too slow.
-        # Exclude it on all versions except for 5.6.
-        # - env: DB=mysqli   PHPUNIT=true    INSTALL=false   CITEST=false
-        #   php: 5.5
-
-        - env: DB=mysqli   PHPUNIT=true    INSTALL=false   CITEST=false
-          php: 5.4
-
-    include:
-        # Attempt to run the CITEST set on PHP 7.
-        - php: nightly
-          env: DB=none     PHPUNIT=false   INSTALL=false   CITEST=true
-
-cache:
-    directories:
-      - $HOME/.composer/cache
+    - DB=mysqli   PHPUNIT=true    INSTALL=true   CITEST=true
 
 before_install:
     - composer self-update;
@@ -86,6 +44,7 @@ install:
 
 before_script:
     - >
+      echo "foo"
       # Copy generic configuration in place.
       cp config-dist.php config.php ;
       # Create the moodledata directory.
