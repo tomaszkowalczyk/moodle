@@ -72,6 +72,9 @@ cache:
     directories:
       - $HOME/.composer/cache
 
+before_install:
+    - composer self-update;
+    
 install:
     # Set the encrypted GITHUB_TOKEN if it's available to raise the API limit.
     - if [ -n "$GITHUB_APITOKEN" ]; then composer config github-oauth.github.com $GITHUB_APITOKEN; fi
