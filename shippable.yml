@@ -28,7 +28,7 @@ env:
     # Postgres is significantly is pretty reasonable in its run-time.
 
     # Run unit tests on MySQL
-    - DB=mysqli   PHPUNIT=true    INSTALL=true   CITEST=true
+    - DB=mysqli   PHPUNIT=true    INSTALL=true   CITEST=true  CI_HOME=`pwd`
 
 before_install:
     - composer self-update;
@@ -46,7 +46,7 @@ before_script:
   - composer self-update
   - composer install
   - cp config-dist.php config.php
-  - echo "pwd: `pwd`"
+  - echo $CI_HOME
   - mkdir -p /var/www/moodledata
   - mkdir -p /var/www/phpunit_moodledata
   - sed -i 's%// \($CFG->phpunit_\)%\1%' config.php
