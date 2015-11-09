@@ -46,7 +46,7 @@ before_script:
   - composer self-update
   - composer install
   - cp config-dist.php config.php
-  - pwd -P
+  - echo pwd -P
   - mkdir -p /var/www/moodledata
   - mkdir -p /var/www/phpunit_moodledata
   - sed -i 's%// \($CFG->phpunit_\)%\1%' config.php
