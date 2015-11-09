@@ -43,41 +43,15 @@ install:
     - travis_retry composer install --prefer-dist --no-interaction
 
 before_script:
-    - >
-      echo "foo"
-      # Copy generic configuration in place.
-      cp config-dist.php config.php ;
-      # Create the moodledata directory.
-      mkdir -p "$HOME"/roots/base
-      # The database name and password.
-      sed -i \
-        -e "s%= 'moodle'%= 'travis_ci_test'%" \
-        -e "s%= 'password'%= ''%" \
-        config.php ;
-      # The wwwroot and dataroot.
-      sed -i \
-        -e "s%http://example.com/moodle%http://localhost%" \
-        -e "s%/home/example/moodledata%/home/travis/roots/base%" \
-        config.php ;
-      
-        # MySQL-specific setup.
-        sed -i \
-          -e "s%= 'pgsql'%= 'mysqli'%" \
-          -e "s%= 'username'%= 'travis'%" \
-          config.php;
-        mysql -u root -e 'SET GLOBAL innodb_file_format=barracuda;' ;
-        mysql -u root -e 'SET GLOBAL innodb_file_per_table=ON;' ;
-        mysql -e 'CREATE DATABASE travis_ci_test DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_bin;' ;
-      
-        # Create a directory for the phpunit dataroot.
-        mkdir -p "$HOME"/roots/phpunit
-        # The phpunit dataroot and prefix..
-        sed -i \
-          -e "/require_once/i \\\$CFG->phpunit_dataroot = '\/home\/travis\/roots\/phpunit';" \
-          -e "/require_once/i \\\$CFG->phpunit_prefix = 'p_';" \
-          config.php ;
-        # Initialise PHPUnit for Moodle.
-        php admin/tool/phpunit/cli/init.php
+  - composer self-update
+  - composer install
+  - cp config-dist.php config.php
+  - mkdir -p /var/www/moodledata
+  - mkdir -p /var/www/phpunit_moodledata
+  - sed -i 's%// \($CFG->phpunit_\)%\1%' config.php
+  - sed -i "s%http://example.com/moodle%http://localhost%" config.php
+  - sed -i "s%/home/example/moodledata%/var/www/moodledata%" config.php
+  - sed -i "s%/home/example/phpu_moodledata%/var/www/phpunit_moodledata%" config.php
       
       
 script:
@@ -87,7 +61,7 @@ script:
     - >
       if [ "$PHPUNIT" = 'true' ];
       then
-        vendor/bin/phpunit;
+        vendor/bin/phpunit --colors --debug  --coverage-text;
       fi
     ########################################################################
     # CI Tests
