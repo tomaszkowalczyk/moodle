@@ -12,3 +12,4 @@
 /config.php
 /vendor/
 .env
+composer.*
