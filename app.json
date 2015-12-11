@@ -4,6 +4,6 @@
 	"repository": "https://github.com/tomaszkowalczyk/moodle.git",
 	"addons": [],
 	"env": {
-	    "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-php"
+	    "BUILDPACK_URL": "https://github.com/briancollins/moodle-heroku-buildpack.git"
 	}
 }
