@@ -173,3 +173,19 @@ script:
       then
         bash local/ci/php_lint/php_lint.sh;
       fi
+
+before_deploy:
+  - zip -r latest *
+  - mkdir -p dpl_cd_upload
+  - mv latest.zip dpl_cd_upload/latest.zip
+
+deploy:
+  - provider: s3
+    access_key_id: AKIAIQLBUBQUKH2ZJRBQ
+    secret_access_key: &1
+      secure: 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
+    local_dir: dpl_cd_upload
+    skip_cleanup: true
+    on: &2
+      repo: tomaszkowalczyk/moodle
+    bucket: inpin/inpin deployments
