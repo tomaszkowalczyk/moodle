@@ -186,6 +186,7 @@ deploy:
       secure: zfcqfGjSu86aPWthA3gvbxJ1yydBd5e43gYJAxTo
     local_dir: dpl_cd_upload
     skip_cleanup: true
+    all_branches: true
     on: &2
       repo: tomaszkowalczyk/moodle
     bucket: inpin/inpin deployments
